@@ -16,7 +16,7 @@ from pprint import pprint
 import time
 import http
 import urllib
-subscription_key='68e05b40bd014e379942ea072d9650a6'
+subscription_key='68e05b40bd014e379942ea072d9650a6X'
 http_uri = 'https://chinaeast2.api.cognitive.azure.cn'
 uri_base = 'chinaeast2.api.cognitive.azure.cn'
 #识别detect脸
