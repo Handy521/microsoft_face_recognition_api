@@ -16,7 +16,7 @@ from pprint import pprint
 import time
 import http
 import urllib
-subscription_key='68e05b40bd014e379942ea072d9650a6X'
+subscription_key='68e05b40bd014e379942ea072d9650aXX'
 http_uri = 'https://chinaeast2.api.cognitive.azure.cn'
 uri_base = 'chinaeast2.api.cognitive.azure.cn'
 #识别detect脸
@@ -48,7 +48,7 @@ def selectLocalFace(imagesUrl):
     parsed = json.loads(response.text)
     print(parsed) 
 #    facenums=0;
-    faceAll=[]
+    facesI=parsed[0].get('faceId')
 #    #提取出faceId和人脸的矩形框定位
 #    for a in parsed:
 #        for b in a:
@@ -66,7 +66,7 @@ def selectLocalFace(imagesUrl):
 #        imagesFace=[faceId,left,top,width,height,gender,age]
 #        faceAll.append(imagesFace)
 #    print(faceAll)
-    return faceAll
+    return facesI
 #    except Exception as e:
 #        print("Error")
 #        print(e)
@@ -122,8 +122,8 @@ def addPersonNa(personGroupId,personName):
         print("Error")
         print(e)
 #向人员中添加人脸(返回的人脸ID是持久的：用作于人脸-识别和人员-删除人脸)
-#personGroupId已创建好的人员组ID,personsId已创建好的人员ID,imagesUrl本地图片路径
-def addPersonFace(personGroupId,personsId,imagesUrl):
+#personGroupId已创建好的人员组ID,personId已创建好的人员ID,imagesUrl本地图片路径
+def addPersonFace(personGroupId,personId,imagesUrl):
     try:
         Request='POST'
         #Content_Type1传递类型
@@ -141,11 +141,11 @@ def addPersonFace(personGroupId,personsId,imagesUrl):
         f=open(imagesUrl,"rb")
         body = {'url': imagesUrl}
         response = requests.request(Request, http_uri + '/face/v1.0/persongroups/%s/persons/%s/persistedFaces?%s'  \
-                                    % (personGroupId,personsId,params), json=body, data=f, headers=headers, params=params)
+                                    % (personGroupId,personId,params), json=body, data=f, headers=headers, params=params)
         print ('Response:')
         parsed = json.loads(response.text)
         print(parsed) 
-        facenums=0;
+#        facenums=0;
         time.sleep(0.2)
     except Exception as e:
         print("Error")
@@ -195,7 +195,7 @@ def identifyFace(personGroupId,faceIds,maxNumOfCandidatesReturned,confidenceThre
     try:
         #maxNumOfCandidatesReturned=1
         #confidenceThreshold=0.5
-        Content_Type1='application/octet-stream'
+#        Content_Type1='application/octet-stream'
         Content_Type2='application/json'
         headers = {
         # Request headers
@@ -229,12 +229,16 @@ def identifyFace(personGroupId,faceIds,maxNumOfCandidatesReturned,confidenceThre
 #selectLocalFace('/home/shinong/Downloads/1187562263.jpg')
 #createGroup('shinong_group','group1','its_ok')
 #s4=addPersonNa('shinong_group','handy')
-image_path='/home/shinong/Desktop/Cognitive-Face-Windows/Data/PersonGroup/Family1-Son/Family1-Son1.jpg'
+#image_path='/home/shinong/Desktop/Cognitive-Face-Windows/Data/PersonGroup/Family1-Son/Family1-Son1.jpg'
 #image_path='/home/shinong/Desktop/Cognitive-Face-Windows/Data/PersonGroup/Family1-Son/Family1-Son2.jpg'
-#image_path='/home/shinong/Desktop/Cognitive-Face-Windows/Data/PersonGroup/Family1-Son/Family1-Son3.jpg'
+image_path='/home/shinong/Desktop/Cognitive-Face-Windows/Data/PersonGroup/Family1-Son/Family1-Son3.jpg'
 #addPersonFace('shinong_group',"a83b8f8f-804f-4e67-aedc-f0c6ec9fe648",image_path)
 #train_person('shinong_group')
    
-#selectLocalFace(image_path)
+a=selectLocalFace(image_path)
 #seltrainGroup('shinong_group')
-identifyFace('shinong_group','2d54298a-177e-4450-bc7a-e491cc05b238',1,0.5)
+#identifyFace('shinong_group','2d54298a-177e-4450-bc7a-e491cc05b238',1,0.5)
+#print(addPersonNa('shinong_group','fy'))
+#image_path='/home/shinong/myself_private/13726742890-25.jpg'
+#addPersonFace('shinong_group',"d69ddf9d-2415-43e2-8c8f-ee9d66cd3a1a",image_path)
+identifyFace('shinong_group',a,1,0.5)
